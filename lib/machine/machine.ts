@@ -24,7 +24,7 @@ import {
 } from "@atomist/sdm-core";
 import _ = require("lodash");
 import { GraphQL } from "@atomist/automation-client";
-import { detectActionableTweet } from "./handler";
+import { detectActionableTweet, TrafficLightHandler } from "./handler";
 
 /**
  * Initialize an sdm definition, and add functionality to it.
@@ -78,11 +78,18 @@ export function machine(
     sdm.addCommand(ActionCommand);
 
     sdm.addIngester(GraphQL.ingester("hackdata"));
+    sdm.addIngester(GraphQL.ingester("trafficlight"));
 
     sdm.addEvent({
         name: "watcher",
         subscription: GraphQL.subscription("hacksubscription"),
         listener: detectActionableTweet(ActionCommand)
+    });
+
+    sdm.addEvent({
+        name: "trafficlight",
+        subscription: GraphQL.subscription("trafficlight"),
+        listener: TrafficLightHandler
     });
 
     return sdm;

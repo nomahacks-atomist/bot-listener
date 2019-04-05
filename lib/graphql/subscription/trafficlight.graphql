@@ -1,0 +1,6 @@
+subscription trafficlight {
+    TrafficLight {
+        color
+        street
+    }
+}
