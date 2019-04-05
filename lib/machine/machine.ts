@@ -17,10 +17,12 @@
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
+    CommandHandlerRegistration,
 } from "@atomist/sdm";
 import {
     createSoftwareDeliveryMachine,
 } from "@atomist/sdm-core";
+import _ = require("lodash");
 
 /**
  * Initialize an sdm definition, and add functionality to it.
@@ -32,15 +34,44 @@ export function machine(
 ): SoftwareDeliveryMachine {
 
     const sdm = createSoftwareDeliveryMachine({
-        name: "Empty Seed Software Delivery Machine",
+        name: "Noma Hacks Bot Listener Sample",
         configuration,
     });
 
-    /*
-     * this is a good place to type
-    sdm.
-     * and see what the IDE suggests for after the dot
+    /**
+     * here's a simple registration of a function to call from from slack when you say "yo"
+     * the bot can ask questions using parameters
      */
+    sdm.addCommand({
+        name: "whatever",
+        intent: "yo",
+        parameters: {
+            hack: { required: true }
+        },
+        listener: async i => {
+
+            await i.addressChannels(`hack something with parameter ${_.get(i.parameters, "hack")}`);
+
+            return;
+        }
+    });
+
+    /**
+     * here's an anonymous function that you could put behind a button whenever the bot 
+     * notices something
+     */
+    sdm.addCommand({
+        name: "action",
+        parameters: {
+            data: { required: true }
+        },
+        listener: async i => {
+
+            await i.addressChannels(`I just heard a ${_.get(i.parameters, "data")}`);
+
+            return;
+        }
+    })
 
     return sdm;
 }
