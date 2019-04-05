@@ -1,0 +1,9 @@
+subscription hacksubscription {
+    TrackData {
+        id
+        text
+        description
+        name
+        screen_name
+    }
+}

@@ -1,0 +1,7 @@
+type TrackData @rootType {
+    id: Int!
+    text: String
+    description: String
+    name: String
+    screen_name: String
+}

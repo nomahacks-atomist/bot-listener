@@ -23,6 +23,8 @@ import {
     createSoftwareDeliveryMachine,
 } from "@atomist/sdm-core";
 import _ = require("lodash");
+import { GraphQL } from "@atomist/automation-client";
+import { detectActionableTweet } from "./handler";
 
 /**
  * Initialize an sdm definition, and add functionality to it.
@@ -60,18 +62,27 @@ export function machine(
      * here's an anonymous function that you could put behind a button whenever the bot 
      * notices something
      */
-    sdm.addCommand({
+    const ActionCommand: CommandHandlerRegistration = {
         name: "action",
         parameters: {
             data: { required: true }
         },
         listener: async i => {
 
-            await i.addressChannels(`I just heard a ${_.get(i.parameters, "data")}`);
+            await i.addressChannels(`Someone just sent ${_.get(i.parameters, "data")}`);
 
             return;
         }
-    })
+    };
+    sdm.addCommand(ActionCommand);
+
+    sdm.addIngester(GraphQL.ingester("hackdata"));
+
+    sdm.addEvent({
+        name: "watcher",
+        subscription: GraphQL.subscription("hacksubscription"),
+        listener: detectActionableTweet(ActionCommand)
+    });
 
     return sdm;
 }
