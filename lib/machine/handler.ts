@@ -23,6 +23,7 @@ export function detectActionableTweet(action: CommandHandlerRegistration) {
                             action,
                             {
                                 data: text,
+                                user: screenName
                             },
                         ),
                     ],

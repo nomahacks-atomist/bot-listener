@@ -65,11 +65,12 @@ export function machine(
     const ActionCommand: CommandHandlerRegistration = {
         name: "action",
         parameters: {
-            data: { required: true }
+            data: { required: true },
+            user: { required: true }
         },
         listener: async i => {
 
-            await i.addressChannels(`Someone just sent ${_.get(i.parameters, "data")}`);
+            await i.addressChannels(`${_.get(i.parameters, "user")} just sent ${_.get(i.parameters, "data")}`);
 
             return;
         }
