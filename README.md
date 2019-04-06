@@ -13,6 +13,7 @@ To use this repo as a starter for your own bot command or listener, do this:
 * `atomist config` - to link your local bot-listner to the Atomist workspace
 * In the bot-listener repo, `atomist start` - this will start up a Node process that connects to the Atomist workspace that the bot here is working with
 * `/invite` the bot to a channel, then it's ready to listen to your intent (Note: please change the `yo` intent to your custom command)
+* Start customizing the bot in `bot-listener/lib/machine/machine.ts` and `bot-listener/lib/machine/handler.ts`
 
 # @atomist-seeds/empty-sdm
 
