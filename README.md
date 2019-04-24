@@ -2,6 +2,19 @@
   <img src="https://images.atomist.com/sdm/SDM-Logo-Dark.png">
 </p>
 
+# For NomaHacks teams :loudspeaker:
+
+To use this repo as a starter for your own bot command or listener, do this:
+
+* Clone https://github.com/nomahacks-atomist/bot-listener
+* `cd` into the bot-listener directory
+* `npm install` in the repo directory
+* `npm install -g @atomist/cli`
+* `atomist config` - to link your local bot-listner to the Atomist workspace
+* In the bot-listener repo, `atomist start` - this will start up a Node process that connects to the Atomist workspace that the bot here is working with
+* `/invite` the bot to a channel, then it's ready to listen to your intent (Note: please change the `yo` intent to your custom command)
+* Start customizing the bot in `bot-listener/lib/machine/machine.ts` and `bot-listener/lib/machine/handler.ts`
+
 # @atomist-seeds/empty-sdm
 
 [![atomist sdm goals](http://badge.atomist.com/T29E48P34/atomist-seeds/empty-sdm/c796f715-67c3-48ae-8b7c-45c0fd31443f)](https://app.atomist.com/workspace/T29E48P34)
