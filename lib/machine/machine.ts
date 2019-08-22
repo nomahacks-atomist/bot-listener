@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
+import { CustomEventDestination, Destination, GraphQL } from "@atomist/automation-client";
 import {
+    CommandHandlerRegistration,
+    // tslint:disable-next-line: ordered-imports
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
-    CommandHandlerRegistration,
 } from "@atomist/sdm";
 import {
-    createSoftwareDeliveryMachine,
+    createSoftwareDeliveryMachine, truncateCommitMessage,
 } from "@atomist/sdm-core";
+// tslint:disable-next-line: no-implicit-dependencies
 import _ = require("lodash");
-import { GraphQL } from "@atomist/automation-client";
 import { detectActionableTweet, TrafficLightHandler } from "./handler";
+
 
 /**
  * Initialize an sdm definition, and add functionality to it.
@@ -52,10 +55,17 @@ export function machine(
         },
         listener: async i => {
 
+            const event = {
+                id: "id",
+                name: "name",
+                description: "description",
+            };
+            const destination: CustomEventDestination = new CustomEventDestination("TrackData");
+            await i.context.messageClient.send(event, destination);
             await i.addressChannels(`hack something with parameter ${_.get(i.parameters, "hack")}`);
 
             return;
-        }
+        },
     });
 
     /**
@@ -73,7 +83,7 @@ export function machine(
             await i.addressChannels(`${_.get(i.parameters, "user")} just sent ${_.get(i.parameters, "data")}`);
 
             return;
-        }
+        },
     };
     sdm.addCommand(ActionCommand);
 
@@ -83,13 +93,13 @@ export function machine(
     sdm.addEvent({
         name: "watcher",
         subscription: GraphQL.subscription("hacksubscription"),
-        listener: detectActionableTweet(ActionCommand)
+        listener: detectActionableTweet(ActionCommand),
     });
 
     sdm.addEvent({
         name: "trafficlight",
         subscription: GraphQL.subscription("trafficlight"),
-        listener: TrafficLightHandler
+        listener: TrafficLightHandler,
     });
 
     return sdm;
